@@ -71,5 +71,5 @@ def write_ncdf_output(_forcing_curves, _sector_list, _out_file, max_len=365 * 3)
         for reg, forcing_ts in tqdm.tqdm(_forcing_curves.items()):
             for sec in sectors:
                 forcing_data[:len(forcing_ts), sectors.index(sec), regions.index(reg)] = forcing_ts
-        forcing_data[forcing_data < 0] = 0
+        forcing_data[forcing_data <= 0.001] = 0.001
         forcing[:] = forcing_data
