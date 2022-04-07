@@ -1,4 +1,0 @@
-[submodule "submodules/acclimate"]
-	path = submodules/acclimate
-	url = git@github.com:acclimate/acclimate.git
-	branch = develop
