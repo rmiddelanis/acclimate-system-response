@@ -1,25 +1,25 @@
+import subprocess
+import numpy as np
+
 import sys
 import os
-import subprocess
+if os.getlogin() == 'robin':
+    cluster_login = 'robinmid'
+    subprocess.call(["bash", "/home/robin/scripts/mount_cluster_dirs.sh", "mount"])
+    sys.path.append("/home/robin/repos/acclimate-system-response/scripts")
+    sys.path.append("/home/robin/repos/post-processing/")
+elif os.getlogin() == 'quante':
+    cluster_login = 'quante'
+    # TODO
+    # subprocess.call(["bash", "/home/robin/scripts/mount_cluster_dirs.sh", "mount"])
+    # sys.path.append("/home/robin/repos/acclimate-system-response/scripts")
+    # sys.path.append("/home/robin/repos/post-processing/")
 
-import numpy as np
+from utils import EORA_CHN_USA_REGIONS, write_ncdf_output, EORA_SECTORS
+from acclimate.dataset import AcclimateOutput
 
 local_cluster_project_dir = "/mnt/cluster/p/projects/compacts/projects/acclimate-system-response/"
 local_template_dir = "/mnt/cluster/p/projects/compacts/projects/acclimate-system-response/acclimate-system-response/templates/"
-
-if os.getlogin() == 'robin':
-    cluster_login = 'robinmid'
-    repo_dir = "/home/robin/repos/acclimate-system-response"
-    subprocess.call(["bash", "/home/robin/scripts/mount_cluster_dirs.sh", "mount"])
-elif os.getlogin() == 'quante':
-    cluster_login = 'lquante'
-    # TODO
-    # repo_dir = "/home/robin/repos/acclimate-system-response"
-    # subprocess.call(["bash", "~/scripts/mount_cluster_dirs.sh", "mount"])
-
-sys.path.append(os.path.join(repo_dir, "scripts"))
-
-from utils import EORA_CHN_USA_REGIONS, write_ncdf_output, EORA_SECTORS
 
 
 def generate_dirac_impulse(regions, outpath, t_shock=5, magnitude=1, series_len=365):
@@ -73,3 +73,6 @@ def generate_simulation_ensemble(name, region_groups=None, magnitudes=1, simulat
         if start_runs:
             command = "sbatch {}".format(os.path.join(simulation_dir.replace('/mnt/cluster', ''), 'slurm_script.sh'))
             subprocess.call(["ssh", "{}@cluster.pik-potsdam.de".format(cluster_login), command])
+
+
+

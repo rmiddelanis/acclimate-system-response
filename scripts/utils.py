@@ -1,3 +1,6 @@
+import os
+
+from acclimate.dataset import AcclimateOutput
 from netCDF4 import Dataset
 import numpy as np
 import tqdm
@@ -73,3 +76,15 @@ def write_ncdf_output(_forcing_curves, _sector_list, _out_file, max_len=365 * 3)
                 forcing_data[:len(forcing_ts), sectors.index(sec), regions.index(reg)] = forcing_ts
         forcing_data[forcing_data <= 0.001] = 0.001
         forcing[:] = forcing_data
+
+
+def load_simulation_results(ensemble_path, groups=None, variables=None):
+    data = {}
+    for simulation_folder in tqdm.tqdm(os.listdir(ensemble_path)):
+        data_path = os.path.join(ensemble_path, simulation_folder, 'output.nc')
+        region = simulation_folder.split('_')[0]
+        magnitude = float(simulation_folder.split('_m')[1])
+        data[(region, magnitude)] = AcclimateOutput(data_path, groups_to_load=groups, vars_to_load=variables)
+    return data
+
+
