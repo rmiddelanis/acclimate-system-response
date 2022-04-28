@@ -15,6 +15,7 @@ elif os.getlogin() == 'quante':
     # sys.path.append("/home/robin/repos/acclimate-system-response/scripts")
     # sys.path.append("/home/robin/repos/post-processing/")
 
+
 from utils import EORA_CHN_USA_REGIONS, write_ncdf_output, EORA_SECTORS
 from acclimate.dataset import AcclimateOutput
 
@@ -70,9 +71,9 @@ def generate_simulation_ensemble(name, region_groups=None, magnitudes=1, simulat
             slurm_data = slurm_data.replace('+++job_name+++', 'acc-sys_{}'.format(simulation_name))
             with open(slurm_target_path, "wt") as slurm_file:
                 slurm_file.write(slurm_data)
-        if start_runs:
-            command = "sbatch {}".format(os.path.join(simulation_dir.replace('/mnt/cluster', ''), 'slurm_script.sh'))
-            subprocess.call(["ssh", "{}@cluster.pik-potsdam.de".format(cluster_login), command])
+            if start_runs:
+                command = "sbatch {}".format(os.path.join(simulation_dir.replace('/mnt/cluster', ''), 'slurm_script.sh'))
+                subprocess.call(["ssh", "{}@cluster.pik-potsdam.de".format(cluster_login), command])
 
 
 

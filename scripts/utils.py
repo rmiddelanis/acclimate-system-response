@@ -86,5 +86,3 @@ def load_simulation_results(ensemble_path, groups=None, variables=None):
         magnitude = float(simulation_folder.split('_m')[1])
         data[(region, magnitude)] = AcclimateOutput(data_path, groups_to_load=groups, vars_to_load=variables)
     return data
-
-
