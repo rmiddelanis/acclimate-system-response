@@ -72,7 +72,7 @@ def generate_random_forcing(region_group, outpath, forcing_start_time=1, min_sho
     for i_region in region_group:
         random_impulse = rng.uniform(min_shock, max_shock, series_len)
         # eunsure forcing free start of simulation in baseline state
-        for i_timepoint in range(0,forcing_start_time,step=1):
+        for i_timepoint in range(0,forcing_start_time):
             random_impulse[i_timepoint] = 0
         region_forcing = np.ones(series_len) - random_impulse
         forcing[i_region] = region_forcing
