@@ -54,8 +54,8 @@ def generate_multi_day_dirac_impulse(regions, outpath, start_shock=5, end_shock=
 from numpy.random import default_rng
 
 
-def generate_random_forcing(region_group, outpath, forcing_start_time=1, min_shock=0.0, max_shock=0.2, series_len=720, random_seed=None):
-
+def generate_random_forcing(region_group, outpath, forcing_start_time=1, min_shock=0.0, max_shock=0.2, series_len=720,
+                            random_seed=None, forcing_free_end_time=365):
     if min_shock < 0 or min_shock > 1:
         raise ValueError("min_shock must be in [0,1]")
     if max_shock < 0 or max_shock > 1:
@@ -71,8 +71,11 @@ def generate_random_forcing(region_group, outpath, forcing_start_time=1, min_sho
 
     for i_region in region_group:
         random_impulse = rng.uniform(min_shock, max_shock, series_len)
-        # eunsure forcing free start of simulation in baseline state
-        for i_timepoint in range(0,forcing_start_time):
+        # forcing free start of simulation in baseline state
+        for i_timepoint in range(0, forcing_start_time):
+            random_impulse[i_timepoint] = 0
+        # option to have forcing free end period to observe stabilization of system
+        for i_timepoint in range(series_len - forcing_free_end_time, series_len):
             random_impulse[i_timepoint] = 0
         region_forcing = np.ones(series_len) - random_impulse
         forcing[i_region] = region_forcing
